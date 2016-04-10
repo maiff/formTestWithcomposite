@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>formTest</title>
+	<script type="text/javascript" src="js/extend.js"></script>
+	<script type="text/javascript" src="js/interface.js"></script>
+	<script type="text/javascript" src="js/cookie.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+</head>
+<body>
+<input type="button" id="oBtn" value='保存'>
+
+	
+</body>
+<script type="text/javascript">
+//setCookie("test","tank",1800);         //设置cookie的值，生存时间半个小时  
+//alert(getCookie('test'));                     //取得cookie的值，显示tank  
+	var input_field=new InputField('name','姓名:',"name-one",[nameTest,'姓名应该在4~16']);
+	//document.body.appendChild(input_field.getElement());
+	var pass_field=new InputField('pass','密码:',"pass",[passTest,'密码应该在6~16'],'password');
+	var pass_com_field=new InputField('pass-weo','密码:',"pass",[passComTest,'密码应该与上次输入相同'],'password');
+	var mail_field=new InputField('email','邮箱:',"mail",[mailTest,'请输入邮箱'],'email');
+	var num_field=new InputField('num','号码:',"num",[numTest,'请输入号码']);
+	var button=document.createElement('input');
+	button.value="提交";
+	button.type='button';
+
+
+
+
+	var contactForm=new CompositeForm('container','GET','test.php')
+	 contactForm.add(input_field);
+	 contactForm.add( pass_field);
+	 contactForm.add( pass_com_field);
+	 contactForm.add( mail_field);
+	 contactForm.add( num_field);
+	 button.onclick=function(){
+			var child=contactForm.getAllChild();
+			for(var i=0,len=child.length;i<len;i++){
+				if(child[i].isRight==false){
+					alert('有没输对的');
+					return;
+				}
+			}
+			contactForm.getElement().submit();
+	}
+
+	 document.body.appendChild(contactForm.getElement());
+	 contactForm.getElement().appendChild(button)
+	// window.addEventListener('unload',function(){
+	// 		contactForm.save.call(contactForm);
+	// });
+	// window.addEventListener('load',function(){
+	// 		contactForm.restore.call(contactForm);
+	// });
+	
+
+
+
+
+	function nameTest(input){
+		if(input.getValue()==''){
+			input.p.innerHTML='不能为空';
+			input.isRight=false;
+
+		}else{
+			if(input.getValue().length>=4&&input.getValue().length<16){
+				input.p.innerHTML='格式正确';
+				input.isRight=true;
+			}
+			else if(!(input.getValue().length>=4&&input.getValue().length<16)){
+				input.p.innerHTML='名称长度要大于4小于16';
+				input.isRight=false;
+
+		}
+	}
+	};
+		function passTest(input){
+		if(input.getValue()==''){
+			input.p.innerHTML='不能为空';
+			input.isRight=false;
+
+		}else{
+			if(input.getValue().length>=6&&input.getValue().length<16){
+				input.p.innerHTML='格式正确';
+				input.isRight=true;
+			}
+			else {
+					input.p.innerHTML='名称长度要大于6小于16';
+					input.isRight=false;
+				}
+		}
+	
+	};
+	function passComTest(input){
+		if(input.getValue()!==pass_field.getValue()){
+			input.p.innerHTML='应该与第一次输入相同';
+			input.isRight=false;
+		}else{
+			input.p.innerHTML='格式正确';
+			input.isRight=true;
+		}
+	};
+	function mailTest(input){
+		var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/; 
+		if(!reg.test(input.getValue())){
+			input.p.innerHTML='请输入正确邮箱';
+			input.isRight=false;
+
+		} else{
+			input.p.innerHTML='邮箱格式正确';
+			input.isRight=true;
+
+		}
+	}
+	function numTest(input){
+		if(input.getValue())
+		var reg = /^1\d{10}$/; 
+		if(!reg.test(input.getValue())){
+			input.p.innerHTML='请输入正确号码';
+			input.isRight=false;
+		} else{
+			input.p.innerHTML='号码格式正确';
+			input.isRight=true;
+		}
+	}
+
+
+
+	
+</script>
+</html>
